@@ -1,0 +1,51 @@
+{{ ansible_managed | comment }}
+<VirtualHost *:{{ wtd_srv_httpd_conf.Listen|default('80') }}>
+  ServerName {{ ansible_hostname }}
+  DocumentRoot {{ wtd_srv_httpd_example_path }}
+
+  # Named Log Files
+  LogLevel warn
+  ErrorLog logs/example-error.log
+  CustomLog logs/example-access.log combined
+
+  <Directory {{ wtd_srv_httpd_example_path}}>
+    Require all granted
+    Options None
+  </Directory>
+
+</VirtualHost>
+# Below you can find the example for SSL
+# You have to get a certificate, before.
+#<VirtualHost *:{{ wtd_srv_httpd_conf.Listen|default('80') }}>
+#  ServerName {{ ansible_hostname }}
+#  # Redirect to SSL
+#  Redirect / https://{{ ansible_hostname }}/
+#
+#  # Named Log Files
+#  LogLevel warn
+#  ErrorLog logs/example-error.log
+#  CustomLog logs/example-access.log combined
+#</VirtualHost>
+#
+#<VirtualHost *:{{ wtd_srv_httpd_mod_ssl_conf.Listen|default('443') }}>
+#  ServerName {{ ansible_hostname }}
+#  DocumentRoot {{ wtd_srv_httpd_example_path }}
+#
+#  # Named Log Files
+#  LogLevel warn
+#  ErrorLog logs/example-ssl-error.log
+#  CustomLog logs/example-ssl-access.log combined
+#
+#  # Turn SSL on
+#  SSLEngine                 on
+#  SSLCertificateFile        example.crt
+#  SSLCertificateKeyFile     example.key
+#  # Optional Chain File
+#  # SSLCertificateChainFile example.chain
+#
+#  <Directory {{ wtd_srv_httpd_example_path }}>
+#    Require all granted
+#    Options None
+#  </Directory>
+#
+#</VirtualHost>

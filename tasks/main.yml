@@ -1,0 +1,100 @@
+---
+# tasks file for while_true_do.srv_httpd
+
+- name: Manage httpd Packages
+  package:
+    name: "{{ wtd_srv_httpd_package }}"
+    state: "{{ wtd_srv_httpd_package_state }}"
+  become: true
+  tags:
+    - httpd
+    - package
+
+- name: Include httpd Configuration Tasks
+  include_tasks: "configure_httpd.yml"
+  when:
+    - wtd_srv_httpd_package_state != "absent"
+  tags:
+    - httpd
+    - configuration
+
+- name: Manage mod_ssl Packages
+  package:
+    name: "{{ wtd_srv_httpd_mod_ssl_package }}"
+    state: "{{ wtd_srv_httpd_mod_ssl_package_state }}"
+  become: true
+  notify:
+    - Restart httpd
+  when:
+    - wtd_srv_httpd_package_state != "absent"
+  tags:
+    - httpd
+    - modules
+    - package
+    - security
+    - ssl
+
+- name: Include mod_ssl Configuration Tasks
+  include_tasks: "configure_mod_ssl.yml"
+  when:
+    - wtd_srv_httpd_package_state != "absent"
+    - wtd_srv_httpd_mod_ssl_package_state != "absent"
+  tags:
+    - httpd
+    - configuration
+    - modules
+    - security
+    - ssl
+
+- name: Manage mod_security Packages
+  package:
+    name: "{{ wtd_srv_httpd_mod_security_package }}"
+    state: "{{ wtd_srv_httpd_mod_security_package_state }}"
+  become: true
+  notify:
+    - Restart httpd
+  when:
+    - wtd_srv_httpd_package_state != "absent"
+  tags:
+    - httpd
+    - modules
+    - package
+    - security
+
+- name: Include example_page Configuration Tasks
+  include_tasks: "configure_example_page.yml"
+  when:
+    - wtd_srv_httpd_package_state != "absent"
+    - wtd_srv_httpd_example|bool
+  tags:
+    - httpd
+    - configuration
+    - example
+
+- name: Manage httpd Service
+  service:
+    name: "{{ wtd_srv_httpd_service }}"
+    state: "{{ wtd_srv_httpd_service_state }}"
+    enabled: "{{ wtd_srv_httpd_service_enabled }}"
+  become: true
+  when:
+    - wtd_srv_httpd_package_state != "absent"
+  tags:
+    - httpd
+    - service
+
+- name: Manage httpd FW Service
+  firewalld:
+    service: "{{ item }}"
+    state: "{{ wtd_srv_httpd_fw_state }}"
+    zone: "{{ wtd_srv_httpd_fw_zone }}"
+  become: true
+  loop: "{{ wtd_srv_httpd_fw_service }}"
+  when:
+    - '"firewalld" in ansible_facts.packages'
+    - wtd_srv_httpd_fw_mgmt|bool
+  tags:
+    - httpd
+    - security
+    - firewall
+    - firewalld

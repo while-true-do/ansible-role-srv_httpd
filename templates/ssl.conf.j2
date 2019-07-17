@@ -1,0 +1,36 @@
+{{ ansible_managed | comment }}
+# This configuration is heavily inspired by https://cipherli.st/
+# You should define named VirtualHost Blocks in conf.d/*.conf
+
+Listen                            {{ wtd_srv_httpd_mod_ssl_conf.Listen|default('443') }} https
+
+SSLPassPhraseDialog               {{ wtd_srv_httpd_mod_ssl_conf.SSLPassPhraseDialog|default('exec:/usr/libexec/httpd-ssl-pass-dialog') }}
+SSLSessionCache                   {{ wtd_srv_httpd_mod_ssl_conf.SSLSessionCache|default('shmcb:/run/httpd/sslcache(512000)') }}
+SSLSessionCacheTimeout            {{ wtd_srv_httpd_mod_ssl_conf.SSLSessionCacheTimeout|default('300') }}
+
+SSLRandomSeed startup             {{ wtd_srv_httpd_mod_ssl_conf.SSLRandomSeed_startup|default('file:/dev/urandom 256') }}
+SSLRandomSeed connect             {{ wtd_srv_httpd_mod_ssl_conf.SSLRandomSeed_connect|default('builtin') }}
+
+SSLCryptoDevice                   {{ wtd_srv_httpd_mod_ssl_conf.SSLCryptoDevice|default('builtin')}}
+
+SSLCipherSuite                    {{ wtd_srv_httpd_mod_ssl_conf.SSLCipherSuite|default('EECDH+AESGCM:EDH+AESGCM')}}
+SSLHonorCipherOrder               {{ wtd_srv_httpd_mod_ssl_conf.SSLHonorCipherOrder|default('on') }}
+
+{% if ansible_facts.packages['httpd'].0.version is version('2.4.36','>=') %}
+SSLProtocol                       {{ wtd_srv_httpd_mod_ssl_conf.SSLProtocol|default('-all +TLSv1.3 +TLSv1.2')}}
+SSLOpenSSLConfCmd Curves          {{ wtd_srv_httpd_mod_ssl_conf.SSLOpenSSLConfCmd_Curves|default('X25519:secp521r1:secp384r1:prime256v1') }}
+{% else %}
+SSLProtocol                       {{ wtd_srv_httpd_mod_ssl_conf.SSLProtocol|default('All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1')}}
+{% endif %}
+
+{% if ansible_facts.packages['httpd'].0.version is version('2.4.11','>=') %}
+SSLSessionTickets                 {{ wtd_srv_httpd_mod_ssl_conf.SSLSessionTickets|default('off') }}
+{% endif %}
+{% if ansible_facts.packages['httpd'].0.version is version('2.4.8','>=') %}
+SSLOpenSSLConfCmd DHParameters    {{ wtd_srv_httpd_mod_ssl_conf.SSLOpenSSLConfCmd_DHParameters|default('/etc/ssl/certs/httpd-dhparam.pem') }}
+{% endif %}
+{% if ansible_facts.packages['httpd'].0.version is version('2.4','>=') %}
+SSLCompression                    {{ wtd_srv_httpd_mod_ssl_conf.SSLCompression|default('off') }}
+SSLUseStapling                    {{ wtd_srv_httpd_mod_ssl_conf.SSLUseStapling|default('on') }}
+SSLStaplingCache                  {{ wtd_srv_httpd_mod_ssl_conf.SSLStaplingCache|default('shmcb:/var/run/ocsp(128000)') }}
+{% endif %}

@@ -1,0 +1,13 @@
+---
+# handlers file for while_true_do.srv_httpd
+
+- name: Restart httpd
+  service:
+    name: "{{ wtd_srv_httpd_service }}"
+    state: "restarted"
+  become: true
+  tags:
+    - httpd
+    - configuration
+    - modules
+    - service

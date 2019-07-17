@@ -1,0 +1,30 @@
+---
+# tasks file for while_true_do.srv_httpd
+
+- name: Manage example Page
+  template:
+    src: "example.html.j2"
+    dest: "{{ wtd_srv_httpd_example_path }}/index.html"
+    owner: "{{ wtd_srv_httpd_conf.User|default('apache') }}"
+    group: "{{ wtd_srv_httpd_conf.Group|default('apache') }}"
+    mode: 0640
+  become: true
+  tags:
+    - httpd
+    - configuration
+    - example
+
+- name: Manage example Configuration
+  template:
+    src: "example.conf.j2"
+    dest: "/etc/httpd/conf.d/example.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  become: true
+  notify:
+    - Restart httpd
+  tags:
+    - httpd
+    - configuration
+    - example

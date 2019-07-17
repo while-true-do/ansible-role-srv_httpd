@@ -1,0 +1,28 @@
+{{ ansible_managed | comment }}
+#
+# This configuration file enables the "userdir" page.
+# This is most likely an unwanted feature.
+# The original file is present as a backup.
+#
+{% if not wtd_srv_httpd_userdir %}
+<IfModule mod_userdir.c>
+  UserDir disabled
+
+  # UserDir is disabled by default since it can confirm the presence
+  # of a username on the system (depending on home directory
+  # permissions).
+</IfModule>
+{% else %}
+<IfModule mod_userdir.c>
+  UserDir {{ wtd_srv_httpd_userdir_path }}
+
+  # UserDir is disabled by default since it can confirm the presence
+  # of a username on the system (depending on home directory
+  # permissions).
+</IfModule>
+<Directory "/home/*/{{ wtd_srv_httpd_userdir_path }}">
+  AllowOverride FileInfo AuthConfig Limit Indexes
+  Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+  Require method GET POST OPTIONS
+</Directory>
+{% endif %}

@@ -1,0 +1,44 @@
+{{ ansible_managed | comment }}
+# This is a very minimal configuration.
+# You should define named VirtualHost Blocks in conf.d/*.conf
+
+ServerName                        {{ wtd_srv_httpd_conf.ServerName|default(ansible_hostname) }}
+
+ServerRoot                        {{ wtd_srv_httpd_conf.ServerRoot|default('/etc/httpd') }}
+User                              {{ wtd_srv_httpd_conf.User|default('apache') }}
+Group                             {{ wtd_srv_httpd_conf.Group|default('apache') }}
+PidFile                           {{ wtd_srv_httpd_conf.PidFile|default('run/httpd.pid') }}
+
+TraceEnable                       {{ wtd_srv_httpd_conf.TraceEnable|default('off') }}
+FileETag                          {{ wtd_srv_httpd_conf.FileETag|default('None') }}
+ServerTokens                      {{ wtd_srv_httpd_conf.ServerTokens|default('prod') }}
+UseCanonicalName                  {{ wtd_srv_httpd_conf.UseCanonicalName|default('off') }}
+ServerSignature                   {{ wtd_srv_httpd_conf.ServerSignature|default('on') }}
+
+Listen                            {{ wtd_srv_httpd_conf.Listen|default('80') }}
+
+Timeout                           {{ wtd_srv_httpd_conf.Timeout|default('60') }}
+MaxRequestWorkers                 {{ wtd_srv_httpd_conf.MaxRequestWorkers|default('100') }}
+
+# Load Modules
+Include                           {{ wtd_srv_httpd_conf.ModulesPath|default('conf.modules.d/*.conf') }}
+
+LogLevel                          {{ wtd_srv_httpd_conf.LogLevel|default('warn') }}
+ErrorLog                          {{ wtd_srv_httpd_conf.ErrorLog|default('logs/error.log') }}
+
+<IfModule mime_module>
+  TypesConfig /etc/mime.types
+</IfModule>
+
+<IfModule mime_magic_module>
+  MIMEMagicFile conf/magic
+</IfModule>
+
+# Never change this block
+<Directory />
+  AllowOverride none
+  Require all denied
+</Directory>
+
+# Load additional config files.
+IncludeOptional {{ wtd_srv_httpd_conf.ConfigPath|default('conf.d/*.conf') }}

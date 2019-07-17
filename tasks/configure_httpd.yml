@@ -1,0 +1,73 @@
+---
+# tasks file for while_true_do.srv_httpd
+
+- name: Gather package facts
+  package_facts:
+    manager: "auto"
+  tags:
+    - httpd
+    - configuration
+    - facts
+    - modules
+    - package
+
+- name: Manage httpd Configuration
+  template:
+    src: "httpd.conf.j2"
+    dest: "/etc/httpd/conf/httpd.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: true
+  become: true
+  notify:
+    - Restart httpd
+  tags:
+    - httpd
+    - configuration
+
+# Below you can find tasks, which care of some other config files.
+- name: Manage autoindex Configuration
+  template:
+    src: "autoindex.conf.j2"
+    dest: "/etc/httpd/conf.d/autoindex.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: true
+  become: true
+  notify:
+    - Restart httpd
+  tags:
+    - httpd
+    - configuration
+
+- name: Manage userdir Configuration
+  template:
+    src: "userdir.conf.j2"
+    dest: "/etc/httpd/conf.d/userdir.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: true
+  become: true
+  notify:
+    - Restart httpd
+  tags:
+    - httpd
+    - configuration
+
+- name: Manage welcome Configuration
+  template:
+    src: "welcome.conf.j2"
+    dest: "/etc/httpd/conf.d/welcome.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: true
+  become: true
+  notify:
+    - Restart httpd
+  tags:
+    - httpd
+    - configuration

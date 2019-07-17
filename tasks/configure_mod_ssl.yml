@@ -1,0 +1,46 @@
+---
+# tasks file for while_true_do.srv_httpd
+
+# Mod SSL
+- name: Gather package facts
+  package_facts:
+    manager: "auto"
+  tags:
+    - httpd
+    - configuration
+    - facts
+    - modules
+    - package
+
+- name: Manage DHParameter File
+  openssl_dhparam:
+    path: "/etc/ssl/certs/httpd-dhparam.pem"
+    size: 4096
+  become: true
+  notify:
+    - Restart httpd
+  when:
+    - ansible_facts.packages['httpd'].0.version is version('2.4.8', '>=')
+  tags:
+    - httpd
+    - configuration
+    - modules
+    - security
+    - ssl
+
+- name: Manage mod_ssl Configuration
+  template:
+    src: "ssl.conf.j2"
+    dest: "/etc/httpd/conf.d/ssl.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  become: true
+  notify:
+    - Restart httpd
+  tags:
+    - httpd
+    - configuration
+    - modules
+    - security
+    - ssl

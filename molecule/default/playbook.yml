@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Install iproute for testinfra
+      package:
+        name: "iproute"
+      become: true
+
+  roles:
+    - role: while_true_do.srv_httpd
+      wtd_srv_httpd_example: true

@@ -1,0 +1,85 @@
+---
+# defaults file for while_true_do.srv_httpd
+
+## Package Management
+wtd_srv_httpd_package: "httpd"
+# State can be present|latest|absent
+wtd_srv_httpd_package_state: "present"
+
+## Configuration Management
+# Manage default Pages from httpd
+wtd_srv_httpd_welcome: false
+wtd_srv_httpd_autoindex: false
+wtd_srv_httpd_userdir: false
+wtd_srv_httpd_userdir_path: "public_html"
+# You can enable an example configuration / site.
+# This step, will provide an index.html and a configuration file.
+wtd_srv_httpd_example: false
+wtd_srv_httpd_example_path: "/var/www/html"
+# Manage httpd.conf
+# https://httpd.apache.org/docs/2.4/configuring.html
+wtd_srv_httpd_conf: []
+# ServerName: "ansible_hostname"
+# ServerRoot: "/etc/httpd"
+# User: "apache"
+# Group: "apache"
+# PidFile: "run/httpd.pid"
+# ServerTokens: "prod"
+# ServerSignature: "off"
+# TraceEnable: "off"
+# FileETag: "None"
+# UseCanonicalName: "on"
+# Listen: "80"
+# Timeout: "60"
+# MaxRequestWorkers: "100"
+# ModulesPath: "conf.modules.d/*.conf"
+# ErrorLog: "logs/error.log"
+# LogLevel: "warn"
+# ConfigPath: "conf.d/*.conf"
+
+## Service Management
+wtd_srv_httpd_service: "httpd"
+# State can be started|stopped
+wtd_srv_httpd_service_state: "started"
+wtd_srv_httpd_service_enabled: true
+
+## Firewalld Management
+wtd_srv_httpd_fw_mgmt: true
+wtd_srv_httpd_fw_service:
+  - http
+  - https
+# State can be enabled|disabled
+wtd_srv_httpd_fw_state: "enabled"
+# Zone can be according to defined zones on your machine.
+wtd_srv_httpd_fw_zone: "public"
+
+## Install & Configure Additional Modules
+# mod_ssl
+# http://www.modssl.org/
+wtd_srv_httpd_mod_ssl_package:
+  - mod_ssl
+  - pyOpenSSL
+wtd_srv_httpd_mod_ssl_package_state: "present"
+# SSL Config is version aware, you should read the template carefully.
+wtd_srv_httpd_mod_ssl_conf: []
+# Listen: "443"
+# SSLPassPhraseDialog: "exec:/usr/libexec/httpd-ssl-pass-dialog"
+# SSLSessionCache: "shmcb:/run/httpd/sslcache(512000)"
+# SSLSessionCacheTimeout: "300"
+# SSLRandomSeed_startup: "ile:/dev/urandom 256"
+# SSLRandomSeed_connect: "builtin"
+# SSLCryptoDevice: "builtin"
+# SSLCipherSuite: "EECDH+AESGCM:EDH+AESGCM"
+# SSLHonorCipherOrder: "on"
+# SSLProtocol: "-all +TLSv1.3 +TLSv1.2"
+# SSLOpenSSLConfCmd_Curves: "X25519:secp521r1:secp384r1:prime256v1"
+# SSLSessionTickets: "off"
+# SSLOpenSSLConfCmd_DHParameters: "/etc/ssl/certs/httpd-dhparam.pem"
+# SSLCompression: "off"
+# SSLUseStapling: on
+# SSLStaplingCache: "shmcb:/var/run/ocsp(128000)"
+
+# mod_security
+# https://modsecurity.org/
+wtd_srv_httpd_mod_security_package: "mod_security"
+wtd_srv_httpd_mod_security_package_state: "present"
