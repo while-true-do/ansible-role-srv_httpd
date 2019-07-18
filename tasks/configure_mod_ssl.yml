@@ -14,13 +14,14 @@
 
 - name: Manage DHParameter File
   openssl_dhparam:
-    path: "/etc/ssl/certs/httpd-dhparam.pem"
+    path: "{{ wtd_srv_httpd_mod_ssl_conf.SSLOpenSSLConfCmd_DHParameters|default('/etc/ssl/certs/httpd-dhparam.pem') }}"
     size: 4096
   become: true
   notify:
     - Restart httpd
   when:
     - ansible_facts.packages['httpd'].0.version is version('2.4.8', '>=')
+    - ansible_virtualization_type != "docker"
   tags:
     - httpd
     - configuration

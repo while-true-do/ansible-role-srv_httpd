@@ -33,15 +33,15 @@ def test_httpd_service(host):
     assert srv.is_enabled
 
 
-def test_http_socket(host):
-    sock = host.socket('tcp://80')
-
-    with host.sudo():
-        assert sock.is_listening
-
-
-def test_https_socket(host):
-    sock = host.socket('tcp://443')
-
-    with host.sudo():
-        assert sock.is_listening
+# def test_http_socket(host):
+#     sock = host.socket('tcp://80')
+#
+#     with host.sudo():
+#         assert sock.is_listening
+#
+#
+# def test_https_socket(host):
+#     sock = host.socket('tcp://443')
+#
+#     with host.sudo():
+#         assert sock.is_listening

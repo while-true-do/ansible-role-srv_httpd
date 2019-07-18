@@ -27,7 +27,9 @@ SSLProtocol                       {{ wtd_srv_httpd_mod_ssl_conf.SSLProtocol|defa
 SSLSessionTickets                 {{ wtd_srv_httpd_mod_ssl_conf.SSLSessionTickets|default('off') }}
 {% endif %}
 {% if ansible_facts.packages['httpd'].0.version is version('2.4.8','>=') %}
+{% if ansible_virtualization_type != "docker" %}
 SSLOpenSSLConfCmd DHParameters    {{ wtd_srv_httpd_mod_ssl_conf.SSLOpenSSLConfCmd_DHParameters|default('/etc/ssl/certs/httpd-dhparam.pem') }}
+{% endif %}
 {% endif %}
 {% if ansible_facts.packages['httpd'].0.version is version('2.4','>=') %}
 SSLCompression                    {{ wtd_srv_httpd_mod_ssl_conf.SSLCompression|default('off') }}
