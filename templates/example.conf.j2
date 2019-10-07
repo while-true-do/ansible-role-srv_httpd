@@ -1,7 +1,10 @@
 {{ ansible_managed | comment }}
 <VirtualHost *:{{ wtd_srv_httpd_conf.Listen|default('80') }}>
-  ServerName {{ ansible_hostname }}
-  DocumentRoot {{ wtd_srv_httpd_example_path }}
+  ServerName    {{ ansible_hostname }}
+{% if wtd_srv_httpd_conf.ServerAdmin is defined %}
+  ServerAdmin   {{ wtd_srv_httpd_conf.ServerAdmin }}
+{% endif %}
+  DocumentRoot  {{ wtd_srv_httpd_example_path }}
 
   # Named Log Files
   LogLevel warn

@@ -79,20 +79,20 @@ wtd_srv_httpd_package: "httpd"
 wtd_srv_httpd_package_state: "present"
 
 ## Configuration Management
-# You can enable an example configuration / site.
-# This step, will provide an index.html and a configuration file.
-wtd_srv_httpd_example: true
-wtd_srv_httpd_example_path: "/var/www/html"
-
 # Manage default Pages from httpd
 wtd_srv_httpd_welcome: false
 wtd_srv_httpd_autoindex: false
 wtd_srv_httpd_userdir: false
 wtd_srv_httpd_userdir_path: "public_html"
+# You can enable an example configuration / site.
+# This step, will provide an index.html and a configuration file.
+wtd_srv_httpd_example: false
+wtd_srv_httpd_example_path: "/var/www/html"
 # Manage httpd.conf
 # https://httpd.apache.org/docs/2.4/configuring.html
 wtd_srv_httpd_conf: []
 # ServerName: "ansible_hostname"
+# ServerAdmin: "mail@hostname"
 # ServerRoot: "/etc/httpd"
 # User: "apache"
 # Group: "apache"
@@ -147,7 +147,7 @@ wtd_srv_httpd_mod_ssl_conf: []
 # SSLProtocol: "-all +TLSv1.3 +TLSv1.2"
 # SSLOpenSSLConfCmd_Curves: "X25519:secp521r1:secp384r1:prime256v1"
 # SSLSessionTickets: "off"
-# SSLOpenSSLConfCmd_DHParameters: "/etc/ssl/certs/dhparam.pem"
+# SSLOpenSSLConfCmd_DHParameters: "/etc/ssl/certs/httpd-dhparam.pem"
 # SSLCompression: "off"
 # SSLUseStapling: on
 # SSLStaplingCache: "shmcb:/var/run/ocsp(128000)"
