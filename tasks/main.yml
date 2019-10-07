@@ -88,6 +88,8 @@
     service: "{{ item }}"
     state: "{{ wtd_srv_httpd_fw_state }}"
     zone: "{{ wtd_srv_httpd_fw_zone }}"
+    immediate: true
+    permanent: true
   become: true
   loop: "{{ wtd_srv_httpd_fw_service }}"
   when:
