@@ -20,6 +20,7 @@ wtd_srv_httpd_example_path: "/var/www/html"
 # https://httpd.apache.org/docs/2.4/configuring.html
 wtd_srv_httpd_conf: []
 # ServerName: "ansible_hostname"
+# ServerAdmin: "mail@hostname"
 # ServerRoot: "/etc/httpd"
 # User: "apache"
 # Group: "apache"
